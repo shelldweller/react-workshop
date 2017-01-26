@@ -1,0 +1,7 @@
+.person {
+    cursor: pointer;
+}
+
+.person:hover {
+    color: royalblue;
+}

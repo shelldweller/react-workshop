@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.full-height {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.full-width {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.padded {
+  padding: 1em;
+}

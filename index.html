@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>The gist of React.js</title>
+
+		<link rel="stylesheet" href="revealjs/css/reveal.css">
+		<link rel="stylesheet" href="revealjs/css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'revealjs/css/print/pdf.css' : 'revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+        <!-- +++++++++++++++++++++++++ -->
+				<section>
+          <h1>The gist of React.js</h1>
+        </section>
+
+				<section>
+          <h2>What is React.js?</h2>
+          <h3 class="fragment">React is just a rendering library</h3>
+        </section>
+
+				<section>
+          <h3>Special JSX syntax</h3>
+          <p>This JSX snippet</p>
+          <pre><code class="hljs xml" data-trim>
+            &lt;Person name="Frodo" age={33} friends={friends} /&gt;
+          </code></pre>
+          <p>compiles to:</p>
+          <pre><code class="hljs" data-trim>
+            React.createElement(
+              Person,
+              {name: 'Frodo', age: 33, friends: friends},
+              null
+            );
+          </code></pre>
+        </section>
+        
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <p>JSX lacks the expressiveness of a template engine</p>
+          <h1>🤔</h1>
+          <div class="fragment">
+            Which is great!
+            <h1>😀</h1>
+          </div>
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <h1>React architecture</h1>
+        </section>
+        
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <p>Component is everything</p>
+          <p class="fragment">Components are structured just like HTML DOM</p>
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section data-transition="fade-in fade-out">
+          <p>All components are descendants of a single root component</p>
+          <img src="img/tree.png">
+        </section>
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section data-transition="fade-in fade-out">
+          <p>Parent components pass data to child components via properties</p>
+          <img src="img/tree-props.png">
+        </section>
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section data-transition="fade-in fade-out">
+          <p>Child components communicate to parent components via callbacks</p>
+          <img src="img/tree-callback-over.png">
+        </section>
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <p>Stateful parent component (ES6 class)</p>
+          <pre><code data-trim>
+            class Parent extends Component {
+              constructor() {
+                super();
+                this.state = { count: 0 };
+                this.addOne = this.addOne.bind(this);
+              }
+
+              addOne() {
+                this.setState({ count: this.state.count + 1});
+              }
+
+              render() {
+                return &lt;Child onClick={this.addOne} count={this.state.count} /&gt;
+              }
+            }
+          </code></pre>
+        </section>
+
+        <section>
+          <p>Stateless child component (function)</p>
+          <pre><code class="javascript" data-trim>
+            function Child(props) {
+              function callback(event) {
+                props.onClick(event.target.value);
+              }
+
+              return (
+                &lt;button onClick={callback}&gt;
+                  You've clicked {props.count} times
+                &lt;/button&gt;
+              )
+            }
+          </code></pre>
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section data-transition="fade-in fade-out">
+          <h3>Component must render a single React component:</h3>
+          <ul>
+            <li>Class based component must implement <code>render()</code> method</li>
+            <li>Function component must return a valid value</li>
+          </ul>          
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <h3>A valid React component can be:</h3>
+          <ul>
+            <li>DOM element</li>
+            <li>React component</li>
+            <li><code>null</code> or <code>false</code> to indicate there's nothing to render</li>
+          </ul>
+        </section>
+
+        <!-- +++++++++++++++++++++++++ -->
+        <section>
+          <p>Components may contain many other components</p>
+          <pre><code class="hljs javascript" data-trim>
+            return (
+              &lt;div&gt;
+                &lt;Book title="A Clockwork Orange" published={1962} /&gt;
+                &lt;Author name="Anthony Burgess" /&gt;
+              &lt;/div&gt;
+            );
+          </code></pre>
+        </section>
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <h2>What causes rendering?</h2>
+          <ul>
+            <li>Component state changes</li>
+            <li>Component receives new properties</li>
+            <li>Initially via <code>ReactDOM.render(...)</code></li>
+          </ul>
+          <pre><code class="hljs javascript" data-trim>
+            ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+          </code></pre>
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <h2>Component methods: mounting</h2>
+          <ul>
+            <li><code>componentWillMount()</code></li>
+            <li><code>componentDidMount()</code></li>
+            <li><code>componentWillUnmount()</code></li>
+          </ul>
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <h2>Component methods: updating</h2>
+          <ul>
+            <li><code>componentWillReceiveProps(nextProps)</code></li>
+            <li><code>shouldComponentUpdate(nextProps, nextState)</code></li>
+            <li><code>componentWillUpdate(nextProps, nextState)</code></li>
+            <li><code>componentDidUpdate(prevProps, prevState)</code></li>
+          </ul>
+        </section>
+
+
+				<!-- +++++++++++++++++++++++++ -->
+        <section>
+          <h2>Tooling</h2>
+          <p class="fragment"><a target="_blank" href="https://github.com/facebookincubator/create-react-app">create-react-app</a></p>
+          <p class="fragment"><a target="_blank" href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en">React developer tools</a></p>
+        </section>
+
+
+        <section>
+          <h2>Hello<br>🌍<br>time!</h2>
+        </section>
+
+
+
+			</div>
+		</div>
+
+    <script src="revealjs/lib/js/head.min.js"></script>
+		<script src="revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+        // maxScale: 1.1,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+				// 	{ src: 'plugin/markdown/marked.js' },
+				// 	{ src: 'plugin/markdown/markdown.js' },
+				// 	{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
